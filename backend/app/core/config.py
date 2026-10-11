@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str = Field(default="", env="DATABASE_URL")
 
     # CORS
-    CORS_ORIGINS_RAW: str = Field(default="http://localhost:5173,http://127.0.0.1:5173", env="CORS_ORIGINS")
+    CORS_ORIGINS_RAW: str = Field(default="*", env="CORS_ORIGINS")
 
     # Machine Learning
     MODEL_PATH: str = Field(default="./data/models", env="MODEL_PATH")
@@ -33,7 +33,7 @@ class Settings(BaseSettings):
 
     @property
     def cors_origins(self) -> List[str]:
-        if not self.CORS_ORIGINS_RAW:
+        if not self.CORS_ORIGINS_RAW or self.CORS_ORIGINS_RAW.strip() == "*":
             return ["*"]
         return [origin.strip() for origin in self.CORS_ORIGINS_RAW.split(",") if origin.strip()]
 
